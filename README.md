@@ -1,3 +1,14 @@
+
+# PU2DIY's SAT DOPPLER CUSTOM FIRMWARE
+
+This repository is a fork of [JoaquimOrg custom firmware (https://github.com/joaquimorg/UV-KX-firmware#-work-in-progress---not-for-everyday-use-)] for Quansheng UV-Kx radios.
+
+The primary enhancement in this fork is the addition of satellite tracking functionality on the radio. This is implemented through a new screen called SAT DOPPLER.
+
+This implementation is based on another custom firmware, Losehu (https://github.com/losehu/uv-k5-firmware-custom/releases).
+
+⚠️ IMPORTANT NOTICE: This firmware is provided "as is" and should be used at your own risk. It has only been tested on the Quansheng UV-K5 (8) (version 1).
+
 # My fork of Quansheng UV-K5/K6/5R custom firmware
 
 This repository is a fork of [Armel custom firmware](https://github.com/armel/uv-k5-firmware-custom)
