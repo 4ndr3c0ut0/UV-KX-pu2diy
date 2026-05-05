@@ -34,6 +34,10 @@
 #include "app/spectrum.h"
 #endif
 
+#ifdef ENABLE_DOPPLER
+#include "app/doppler.h"
+#endif
+
 #include "audio.h"
 #include "board.h"
 #include "driver/bk4819.h"
@@ -818,6 +822,15 @@ static void MAIN_Key_STAR(bool bKeyPressed, bool bKeyHeld)
     else
     {   // with the F-key
         gWasFKeyPressed = false;
+
+#ifdef ENABLE_DOPPLER
+        // F+STAR: Enter Doppler satellite mode
+        gDopplerMode = true;
+        APP_RunDoppler();
+        gRequestDisplayScreen = DISPLAY_MAIN;
+        gUpdateStatus = true;
+        return;
+#endif
 
 #ifdef ENABLE_NOAA
         if (IS_NOAA_CHANNEL(gTxVfo->CHANNEL_SAVE)) {

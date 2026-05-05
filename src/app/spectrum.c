@@ -999,11 +999,12 @@ static void DrawStatus()
 
     unsigned perc = BATTERY_VoltsToPercent(voltage);
 
-    /*if (!Spectrum_IsDisplayReady())
-        return;*/
-
     UI_SetFont(UI_FONT_5_TR);
-    UI_DrawString(UI_TEXT_ALIGN_LEFT, 0, 0, 6, true, false, false, String);
+
+    {
+        UI_DrawString(UI_TEXT_ALIGN_LEFT, 0, 0, 6, true, false, false, String);
+    }
+
     UI_DrawBatteryIcon(perc, 112, 0);
     UI_DrawStringf(UI_TEXT_ALIGN_RIGHT, 0, 110, 6, true, false, false, "%u%%",
         perc);
@@ -1080,14 +1081,6 @@ static void ShowChannelName(uint32_t f) {
 
 static void DrawF(uint32_t f)
 {
-    /*if (!Spectrum_IsDisplayReady())
-        return;*/
-
-    /*UI_SetFont(UI_FONT_8_TR);
-    {
-        UI_DrawStringf(UI_TEXT_ALIGN_LEFT, 0, 0, 10, true, false, false,
-                       "%u.%05u", f / 100000, f % 100000);
-    }*/
 
     UI_DrawFrequencySmall(false, f, 65, 8);
 
@@ -1095,9 +1088,7 @@ static void DrawF(uint32_t f)
     UI_DrawStringf(UI_TEXT_ALIGN_RIGHT, 0, 127, 12, true, false, false,
         "%s %sK", gModulationStr[settings.modulationType], bwOptions[settings.listenBw]);
 
-
     ShowChannelName(f);
-
 }
 
 static void DrawNums()
@@ -1389,9 +1380,6 @@ void OnKeyDownStill(KEY_Code_t key)
         ToggleBacklight();
         break;
     case KEY_PTT:
-        // TODO: start transmit
-        /* BK4819_ToggleGpioOut(BK4819_GPIO6_PIN2_GREEN, false);
-        BK4819_ToggleGpioOut(BK4819_GPIO5_PIN1_RED, true); */
         break;
     case KEY_MENU:
         if (menuState == ARRAY_SIZE(registerSpecs) - 1)
@@ -1432,7 +1420,6 @@ static void RenderFreqInput()
 
 static void RenderStatus()
 {
-    //DrawStatus();
     UI_DrawBatteryIcon(BATTERY_VoltsToPercent(gBatteryVoltageAverage), 114, 0);
 }
 
@@ -1528,6 +1515,7 @@ static void Render()
     UI_ClearDisplay();
     UI_SetBlackColor();
 
+
     switch (currentState)
     {
     case SPECTRUM:
@@ -1537,7 +1525,6 @@ static void Render()
         RenderFreqInput();
         break;
     case STILL:
-        //RenderStill();
         break;
     }
     RenderStatus();
@@ -1548,6 +1535,7 @@ bool HandleUserInput()
 {
     kbd.prev = kbd.current;
     kbd.current = GetKey();
+
 
     if (kbd.current != KEY_INVALID && kbd.current == kbd.prev)
     {
@@ -1573,7 +1561,7 @@ bool HandleUserInput()
             OnKeyDownFreqInput(kbd.current);
             break;
         case STILL:
-            //OnKeyDownStill(kbd.current);
+            OnKeyDownStill(kbd.current);
             break;
         }
     }
@@ -1731,6 +1719,7 @@ static void Tick()
     }
 #endif
 
+
     if (!preventKeypress)
     {
         HandleUserInput();
@@ -1750,17 +1739,8 @@ static void Tick()
         {
             UpdateScan();
         }
-        /*else if (currentState == STILL)
-        {
-            UpdateStill();
-        }*/
     }
-    /*if (redrawStatus || ++statuslineUpdateTimer > 4096)
-    {
-        RenderStatus();
-        redrawStatus = false;
-        statuslineUpdateTimer = 0;
-    }*/
+
     if (redrawScreen)
     {
         Render();
@@ -1775,6 +1755,8 @@ void APP_RunSpectrum()
 #ifdef ENABLE_FEAT_F4HWN_SPECTRUM
     LoadSettings();
 #endif
+
+
     // set the current frequency in the middle of the display
 #ifdef ENABLE_SCAN_RANGES
     if (gScanRangeStart)

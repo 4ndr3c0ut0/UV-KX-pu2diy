@@ -28,6 +28,9 @@
 	.global SystickHandler
 	.weak SystickHandler
 
+	.global HandlerRTC
+	.weak HandlerRTC
+
 	.section .text.isr
 
 Stack:

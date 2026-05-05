@@ -42,7 +42,7 @@ void UI_DisplayWelcome(void)
     UI_SetBlackColor();
     UI_SetFont(FONT_8B_TR);
 
-    UI_DrawString(UI_TEXT_ALIGN_LEFT, 5, 0, 6, true, false, false, "Hello !");
+    UI_DrawString(UI_TEXT_ALIGN_CENTER, 0, 128, 6, true, false, false, "PU2DIY SAT DOPPLER");
 
     UI_DrawString(UI_TEXT_ALIGN_CENTER, 0, 128, 16, true, false, false, "UV-Kx Open Firmware");
 

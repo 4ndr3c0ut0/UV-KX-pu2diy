@@ -305,7 +305,7 @@ volatile bool     gFlagTailNoteEliminationComplete;
     volatile bool gScheduleFM;
 #endif
 
-volatile uint8_t  boot_counter_10ms;
+volatile uint16_t boot_counter_10ms;
 
 uint8_t           gIsLocked = 0xFF;
 

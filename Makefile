@@ -75,6 +75,12 @@ ENABLE_AM_FIX_SHOW_DATA         ?= 0
 ENABLE_AGC_SHOW_DATA            ?= 0
 ENABLE_UART_RW_BK_REGS          ?= 0
 
+# ---- DOPPLER SATELLITE TRACKING ----
+# Real-time Doppler calculation on MCU, no expanded EEPROM needed.
+# Satellite pass parameters uploaded via serial (48 bytes per satellite).
+# Supports up to 63 satellites in standard 8KB EEPROM.
+ENABLE_DOPPLER                  ?= 1
+
 #------------------------------------------------------------------------------
 AUTHOR_NAME ?= JOAQUIM
 AUTHOR_STRING ?= $(AUTHOR_NAME)
@@ -182,7 +188,7 @@ CCFLAGS += -flto=1
 ifeq ($(ENABLE_SPEED_OPTS),1)
 CCFLAGS += -ftree-vectorize -funroll-loops
 endif
-CCFLAGS += -Wextra -Wno-unused-function -Wno-unused-variable -Wno-unknown-pragmas
+CCFLAGS += -Wextra -Wno-unused-function -Wno-unused-variable -Wno-unknown-pragmas -Wno-unterminated-string-initialization
 #-Wunused-parameter -Wconversion
 CCFLAGS += -fno-math-errno -pipe -ffunction-sections -fdata-sections -ffast-math -fno-strict-aliasing
 CCFLAGS += -fsingle-precision-constant -finline-functions-called-once
@@ -402,6 +408,9 @@ ifeq ($(ENABLE_FEAT_F4HWN_DEBUG),1)
 endif
 ifeq ($(ENABLE_EXTRA_UART_CMD),1)
 	CCFLAGS  += -DENABLE_EXTRA_UART_CMD
+endif
+ifeq ($(ENABLE_DOPPLER),1)
+	CCFLAGS  += -DENABLE_DOPPLER
 endif
 
 #------------------------------------------------------------------------------

@@ -56,6 +56,10 @@
     #include "driver/uart.h"
 #endif
 
+#ifdef ENABLE_DOPPLER
+    #include "app/doppler.h"
+#endif
+
 #include "helper/battery.h"
 #include "helper/boot.h"
 
@@ -82,13 +86,17 @@ void Main(void)
         | SYSCON_DEV_CLK_GATE_SARADC_BITS_ENABLE
         | SYSCON_DEV_CLK_GATE_CRC_BITS_ENABLE
         | SYSCON_DEV_CLK_GATE_AES_BITS_ENABLE
-        | SYSCON_DEV_CLK_GATE_PWM_PLUS0_BITS_ENABLE;
+        | SYSCON_DEV_CLK_GATE_PWM_PLUS0_BITS_ENABLE
+#ifdef ENABLE_DOPPLER
+        | SYSCON_DEV_CLK_GATE_RTC_BITS_ENABLE
+#endif
+        ;
 
 
     SYSTICK_Init();
     BOARD_Init();
 
-    boot_counter_10ms = 250;   // 2.5 sec
+    boot_counter_10ms = 400;   // 4 sec
 
 #ifdef ENABLE_UART
     UART_Init();
@@ -113,6 +121,10 @@ void Main(void)
 
     SETTINGS_WriteBuildOptions();
     SETTINGS_LoadCalibration();
+
+#ifdef ENABLE_DOPPLER
+    DOPPLER_Init();     // load satellite list from EEPROM (no RTC yet)
+#endif
 
     RADIO_ConfigureChannel(0, VFO_CONFIGURE_RELOAD);
     RADIO_ConfigureChannel(1, VFO_CONFIGURE_RELOAD);
@@ -225,20 +237,23 @@ void Main(void)
 
         BACKLIGHT_TurnOn();
 
+        // Always show welcome screen for 4 seconds
+        boot_counter_10ms = 400;
+        while (boot_counter_10ms > 0)
+        {
+            if (KEYBOARD_Poll() != KEY_INVALID)
+            {
+                boot_counter_10ms = 0;
+                break;
+            }
+        }
+
 #ifdef ENABLE_FEAT_F4HWN
         if (gEeprom.POWER_ON_DISPLAY_MODE != POWER_ON_DISPLAY_MODE_NONE && gEeprom.POWER_ON_DISPLAY_MODE != POWER_ON_DISPLAY_MODE_SOUND)
 #else
         if (gEeprom.POWER_ON_DISPLAY_MODE != POWER_ON_DISPLAY_MODE_NONE)
 #endif
-        {   // 2.55 second boot-up screen
-            while (boot_counter_10ms > 0)
-            {
-                if (KEYBOARD_Poll() != KEY_INVALID)
-                {   // halt boot beeps
-                    boot_counter_10ms = 0;
-                    break;
-                }
-            }
+        {
             RADIO_SetupRegisters(true);
         }
 
