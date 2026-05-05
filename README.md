@@ -11,8 +11,8 @@ This implementation is based on another custom firmware, Losehu (https://github.
 
 More information:
 
-SAT DOPPLER (english) (https://github.com/4ndr3c0ut0/UV-KX-pu2diy/blob/main/SAT_DOPPLER.md)
-SAT DOPPLER (portuguese) (https://github.com/4ndr3c0ut0/UV-KX-pu2diy/blob/main/SAT_DOPPLER_pt.md)
+- SAT DOPPLER (english) (https://github.com/4ndr3c0ut0/UV-KX-pu2diy/blob/main/SAT_DOPPLER.md)
+- SAT DOPPLER (portuguese) (https://github.com/4ndr3c0ut0/UV-KX-pu2diy/blob/main/SAT_DOPPLER_pt.md)
 
 # My fork of Quansheng UV-K5/K6/5R custom firmware
 
